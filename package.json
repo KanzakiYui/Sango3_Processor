@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "iconv-lite": "^0.5.0",
+    "lodash": "^4.17.15",
+    "random": "^2.1.1"
+  }
+}
