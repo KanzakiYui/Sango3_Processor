@@ -1,9 +1,6 @@
 const fs = require('fs');
 const iconv = require('iconv-lite');
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-/// Read & Parse Data
-
 module.exports = {
     dataReader: filename => {
         const rawData = iconv.decode(fs.readFileSync(filename), 'Windows950');

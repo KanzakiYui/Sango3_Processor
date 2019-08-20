@@ -1,9 +1,6 @@
 const fs = require('fs');
 const iconv = require('iconv-lite');
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-/// Write Data
-
 module.exports = {
     dataWriter: (data, filename) => {
         const rawString = data.reduce((accumulator, item)=>{

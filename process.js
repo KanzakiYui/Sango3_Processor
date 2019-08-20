@@ -2,7 +2,7 @@ const lodash = require('lodash');
 const random = require('random');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-/// Modify Data
+/// Constants
 
 // Strength
 const strMax = 100;
@@ -23,6 +23,14 @@ const hpException = 100;
 const mpMax = 50;
 const mpMin = 20;
 
+// Roughly speaking, every 3 power difference => 1 SA level difference
+const strOrIntDifferenceForSALevel = 3;
+// stronger => smaller index => better superAttack
+// TODO: need to customize here, stronger one first, weaker one next
+const superAttackPriority = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/// Methods
 
 const createStrOrInt = (value, max, min, offset) => {
     const num = lodash.clamp(Number(value), min, max - offset);
@@ -40,11 +48,26 @@ const createHPOrMP = (value, max, min, Comparator, valueException) => {
     return (max - deduction).toString();
 }
 
+const createSuperAttack = (Strength, Intelligence) => {
+    const strDifference = strMax - Number(Strength);
+    const intDifferernce = intMax - Number(Intelligence);
+    const difference = Math.min(strDifference, intDifferernce);
+    const levelOffset = Math.ceil(difference / strOrIntDifferenceForSALevel);
+    const adjustedLevelOffset = random.boolean() ? levelOffset - 1 : levelOffset;
+    if(adjustedLevelOffset >= superAttackPriority.length)
+        return '';
+    const realLevelOffset = lodash.clamp(adjustedLevelOffset, 0, superAttackPriority.length - 1);
+    return superAttackPriority[realLevelOffset];
+}
+
 const createSoliderTypes = () => {
     const firstPart = lodash.repeat(random.int(0, 8).toString(), 4);
     const nextPart = lodash.repeat(random.int(0, 8).toString(), 4);
     return (firstPart+nextPart).split('').join(',');
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/// Module
 
 module.exports = {
     dataProcessor: data => data.map((item, index) => {
@@ -54,13 +77,10 @@ module.exports = {
         const isHPAnException = Number(item.HP) >= hpException;
         const HP = createHPOrMP(Strength, hpMax, hpMin, strMax, isHPAnException);
         // MP is based on computed Strength
-        const MP = createHPOrMP(Intelligence, mpMax, mpMin, intMax);
-        
+        const MP = createHPOrMP(Intelligence, mpMax, mpMin, intMax);   
         const Weapon = '';
-        // TODO?
-        const SuperAttack = (item.Strength > 90 || item.Intelligence > 90)
-            ? random.int(1, 8).toString()
-            : '';
+        // SuperAttack is based on Strength or Intelligence, determined by larger one
+        const SuperAttack = createSuperAttack(Strength, Intelligence);
         const SoldierType = createSoliderTypes();
 
         return {
