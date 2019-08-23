@@ -76,8 +76,7 @@ const createSoliderTypes = () => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// Module
 
-module.exports = {
-    dataProcessor: data => data.map((item, index) => {
+module.exports = data => data.map((item, index) => {
         const Strength = createStrOrInt(item.Strength, strMax, strMin, strOffset);
         const Intelligence = createStrOrInt(item.Intelligence, intMax, intMin, intOffset);
         // HP is based on computed Strength
@@ -100,5 +99,4 @@ module.exports = {
             SuperAttack,
             SoldierType
         };
-    })
-};
+    });
