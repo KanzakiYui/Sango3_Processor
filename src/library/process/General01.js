@@ -41,8 +41,9 @@ const superAttackPriority = ['8', '6', '5', '1', '7', '2', '4', '3'];
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// Methods
 
-const createStrOrInt = (value, max, min, offset) => {
-    const num = lodash.clamp(Number(value), min, max - offset);
+const createStrOrInt = (value, deduction, max, min, offset) => {
+    // deduction will be a adjustment, can be 0
+    const num = Number(value) - deduction;
     const randomNum = random.int(-offset, offset)
     const newNum = lodash.clamp(num + randomNum, min, max);
     return newNum.toString();
@@ -69,7 +70,8 @@ const createSuperAttack = (Strength, Intelligence) => {
 
 const createSoliderTypes = () => {
     const firstPart = lodash.repeat(random.int(0, 8).toString(), 4);
-    const nextPart = lodash.repeat(random.int(0, 8).toString(), 4);
+    // At least 50% chance 1st part will be the same as 2nd part
+    const nextPart = random.boolean() ? firstPart : lodash.repeat(random.int(0, 8).toString(), 4);
     return (firstPart+nextPart).split('').join(',');
 };
 
@@ -77,8 +79,8 @@ const createSoliderTypes = () => {
 /// Module
 
 module.exports = data => data.map((item, index) => {
-        const Strength = createStrOrInt(item.Strength, strMax, strMin, strOffset);
-        const Intelligence = createStrOrInt(item.Intelligence, intMax, intMin, intOffset);
+        const Strength = createStrOrInt(item.Strength, 6, strMax, strMin, strOffset);
+        const Intelligence = createStrOrInt(item.Intelligence, 4, intMax, intMin, intOffset);
         // HP is based on computed Strength
         const isHPAnException = Number(item.HP) >= hpException;
         const HP = isHPAnException ? item.HP : createHPOrMP(Strength, hpMax, hpMin, strMax);

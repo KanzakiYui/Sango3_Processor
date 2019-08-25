@@ -6,7 +6,7 @@ module.exports = () => {
     let counter = 0;
     modifiedData.forEach(item => {
         const {Name, Strength, Intelligence, HP, MP, Weapon, SuperAttack, SoldierType} = item;
-        if( Number(Strength) > 85 || Number(Intelligence) > 85){
+        if( Number(Strength) > 90 || Number(Intelligence) > 90){
             console.log(`${Name} ${Strength} ${Intelligence} ${HP} ${MP} ${Weapon} ${SuperAttack} ${SoldierType}`);
             counter ++
         }

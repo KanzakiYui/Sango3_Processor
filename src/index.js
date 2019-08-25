@@ -1,4 +1,3 @@
 const { general01, sfMagic } = require('./test');
 
-//general01();
-sfMagic();
+general01();
