@@ -1,2 +1,2 @@
-# personal_test
-for testing some daily task as well as for fun
+# Sango3 Processor
+Used for `READ`, `MODIFY`, and `WRITE` ini files of Sango3
